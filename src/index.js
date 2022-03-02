@@ -11,6 +11,7 @@ import Kisi from "kisi-client";
 
 const kisiClient = new Kisi();
 
+
 axios.interceptors.request.use(async (request) => {
   const response = await kisiClient.post("/logins", {
     login: { type: "device" },
