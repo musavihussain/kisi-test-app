@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroups } from "../store/slices/groupSlice";
-import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import {
   Avatar,
   Box,
@@ -22,12 +21,7 @@ import {
   TablePagination,
   Typography,
 } from "@mui/material";
-import { Link } from "react-router-dom";
-
-const linkStyle = {
-  textDecoration: "none",
-  color: "black",
-};
+import Group from "./Group";
 
 function Groups() {
   const dispatch = useDispatch();
@@ -45,12 +39,6 @@ function Groups() {
     dispatch(getGroups({ limit: rowsPerPage, offset: page + 1 }));
   };
 
-  const slugCreator = (Text) => {
-    return Text.toLowerCase()
-      .replace(/ /g, "-")
-      .replace(/[^\w-]+/g, "");
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getGroups({ limit: rowsPerPage, offset: page }));
@@ -58,7 +46,7 @@ function Groups() {
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -80,28 +68,7 @@ function Groups() {
             <List>
               {groups &&
                 groups.map((item) => {
-                  return (
-                    <Link
-                      to={`locks/${slugCreator(item.name)}`}
-                      state={{ item }}
-                      key={item.id}
-                      style={linkStyle}
-                    >
-                      <ListItem>
-                        <ListItemButton>
-                          <ListItemAvatar>
-                            <Avatar>
-                              <GroupOutlinedIcon />
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={item.name}
-                            secondary={item.description}
-                          />
-                        </ListItemButton>
-                      </ListItem>
-                    </Link>
-                  );
+                  return <Group item={item} key={item.id} />;
                 })}
             </List>
           )}
